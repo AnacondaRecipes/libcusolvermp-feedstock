@@ -104,14 +104,19 @@ about:
   home: https://docs.nvidia.com/cuda/cusolvermp/
   license: LicenseRef-NVIDIA-End-User-License-Agreement
   license_file: LICENSE
-  license_url: https://docs.nvidia.com/cuda/cusolvermp/license/index.html
+  license_url: https://docs.nvidia.com/cuda/cusolvermp/license.html
+  license_family: Other
   summary: NVIDIA cuSOLVERMp is a high-performance, distributed-memory, GPU-accelerated library that provides tools for the solution of dense linear systems and eigenvalue problems.
   description: |
     NVIDIA cuSOLVERMp is a high-performance, distributed-memory, GPU-accelerated library that provides tools for the solution of dense linear systems and eigenvalue problems.
     cuSOLVERMp is compatible with 2D block-cyclic data layout and provides ScaLAPACK-like C APIs.
   doc_url: https://docs.nvidia.com/cuda/cusolvermp/
+  dev_url: https://docs.nvidia.com/cuda/cusolvermp/
 
 extra:
+  skip-lints:
+    # We keep Nvidia license URLs, but we don't want linter to complain about it
+    - deprecate_license_url
   feedstock-name: libcusolvermp
   recipe-maintainers:
     - conda-forge/cuda
