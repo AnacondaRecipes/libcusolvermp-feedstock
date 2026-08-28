@@ -58,14 +58,18 @@ outputs:
         - cuda-cudart-dev
         - libcublas-dev
         - libcusolver-dev
+        # 0.9.1 is cuBLASMp's own version, unrelated to the cuSOLVERMp version
+        # above -- do not "sync" it. The runtime output (not -dev) is used on
+        # purpose: its run_export is <0.10.0a0, where -dev's is a looser <1.0a0.
         - libcublasmp 0.9.1.*
+        # Floor required by libcublasmp 0.9.1 (nccl >=2.30.4.1); stricter than
+        # the aggregate CBC's {{ nccl }}, which is just "2".
         - nccl 2.30.*
       run:
         - {{ pin_compatible("cuda-version", min_pin="x", max_pin="x") }}
         - cuda-cudart
         - libcublas
         - libcusolver
-        - libcublasmp
     test:
       commands:
         - test -L $PREFIX/lib/libcusolverMp.so.{{ soname }}
@@ -111,6 +115,11 @@ extra:
   skip-lints:
     # We keep Nvidia license URLs, but we don't want linter to complain about it
     - deprecate_license_url
+    # cuda-cudart/libcublas/libcusolver have independent CUDA-library versions
+    # (not the toolkit version) and no CBC pin var; the host cuda-version pin
+    # steers the compatible build. Exact pins would break CUDA Enhanced
+    # Compatibility. Same approach as libcublasmp-feedstock.
+    - host_section_needs_exact_pinnings
   feedstock-name: libcusolvermp
   recipe-maintainers:
     - conda-forge/cuda
